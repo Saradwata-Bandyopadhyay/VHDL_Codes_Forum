@@ -25,14 +25,13 @@
       <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <!--<img src="resources/sl1.jpg" class="img-fluid" alt="Slider image 1">-->
-            <img src="https://source.unsplash.com/random/1600x500?coding,internet&1" class="img-fluid" alt="Slider image 1">
+            <img src="resources/sl1.jpg" class="img-fluid" alt="Slider image 1">
           </div>
           <div class="carousel-item">
-            <img src="https://source.unsplash.com/random/1600x500?nature,android&2" class="img-fluid" alt="Slider image 2">
+            <img src="resources/sl2.jpg" class="img-fluid" alt="Slider image 2">
           </div>
           <div class="carousel-item">
-            <img src="https://source.unsplash.com/random/1600x500?internet,communication&3" class="img-fluid" alt="Slider image 3">
+            <img src="resources/sl3.jpg" class="img-fluid" alt="Slider image 3">
           </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">

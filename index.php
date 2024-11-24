@@ -8,7 +8,7 @@ $sql = "SELECT * FROM `vhdl_codes_forum`";
 	if(!$result){
 		echo 'result error: '. mysqli_connect_error();
 	}  
-$code =mysqli_fetch_all($result, MYSQLI_ASSOC);
+$codes =mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_free_result($result);
 mysqli_close($conn);
 ?>
@@ -18,7 +18,7 @@ mysqli_close($conn);
 <?php include('header.php'); ?>
 <br>
       <div class="row row-cols-1 row-cols-md-3 g-4">
-      <?php foreach($code as $code) : ?>  
+      <?php foreach($codes as $code) : ?>  
       <div class="col">
         <div class="card h-100">
             <div class="card-body">

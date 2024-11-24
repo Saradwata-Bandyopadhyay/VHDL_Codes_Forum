@@ -1,4 +1,5 @@
-<a href="https://vhdl.swbdigital.com/"><h1>VHDL_Codes_Forum</h1></a>
+<h1>VHDL_Codes_Forum</h1>
+<a href="https://vhdl.swbdigital.com/">Visit Now</a>
 VHDL (VHSIC-HDL, Very High Speed Integrated Circuit Hardware Description Language) is a hardware description language. 
 This website is built using Bootstrap, PHP and MySQL.
 <h2>How to use this on your Local Machine ?</h2>

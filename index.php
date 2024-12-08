@@ -1,42 +1,41 @@
-<?php
-include( 'connect.php');
-$sql = "SELECT * FROM `vhdl_codes_forum`";
-	if(!$sql){
-		echo 'sql error: '. mysqli_connect_error();
-	}
-	$result = mysqli_query($conn, $sql);
-	if(!$result){
-		echo 'result error: '. mysqli_connect_error();
-	}  
-$codes =mysqli_fetch_all($result, MYSQLI_ASSOC);
-mysqli_free_result($result);
-mysqli_close($conn);
-?>
-<!DOCTYPE html>
-<html lang="en">
 <!--Header and navbar-->
 <?php include('header.php'); ?>
-<br>
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-      <?php foreach($codes as $code) : ?>  
-      <div class="col">
-        <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title text-center">Topic <?php echo $code['topic'];?></h5>
-              <p class="card-text"><?php echo $code['question'];?></p>
+<!--Body-->
+<div class="container pt-4 pb-4">
+    <div class="row align-items-center">
+        <div class="col-md order-2 order-md-1">
+            <h1 class="text-white pb-2 pt-2">What is VHDL ?</h1>
+            <p class="text-light">
+                VHDL (VHSIC Hardware Description Language) is a hardware description language that can model the
+                behavior and structure of digital systems at multiple levels of abstraction, ranging from the system
+                level down
+                to that of logic gates, for design entry, documentation, and verification purposes. The language was
+                developed for the US military VHSIC program in the 1980s, and has been standardized by the Institute of
+                Electrical and Electronics Engineers (IEEE) as IEEE Std 1076; the latest version of which is IEEE Std
+                1076-2019. To model analog and mixed-signal systems, an IEEE-standardized HDL based on VHDL called
+                VHDL-AMS (officially IEEE 1076.1) has been developed. <a href="https://en.wikipedia.org/wiki/VHDL"
+                    target="_blank">Read
+                    More..</a></p>
+            <h2 class="text-white pb-2">What to expect here ?</h2>
+            <p class="text-light">Most commonly asked VHDL programs with solutions, tried and tested using ModelSim.</p>
+            <div class="col pb-2">
+                <a type="button" class="btn btn-lg btn-success" href="codes.php" role="button">Get Codes</a>
             </div>
-            <div class="text-center">
-            <form action="code.php" method="POST">
-			      <input type="hidden" name="id" value="<?php echo $code['topic'];?>">
-			      <input type="submit" name="cp" value="Get Code" class="btn btn-success">
-			      </form>  
-            </div>
-            </div>
-            </div>
-            <?php endforeach; ?>
         </div>
-<br>
+        <div class="col-md order-1 order-md-2">
+            <img src="resources/vhdl.jpg" class="img-fluid" alt="VHDL" width="auto" height="auto">
+        </div>
+    </div>
+    <div class="container">
+        <div class="row align-items-center pt-2">
+            <div class="ratio ratio-21x9">
+                <iframe src="https://www.youtube.com/embed/h4ZXge1BE80?list=PLIbRYKjjYOPkhpxnkQ0fwTXnmgsiCMcVV"
+                    title="How to create your first VHDL program: Hello World!" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>
 <!--Footer-->
 <?php include('footer.php'); ?>
-<!--Written by Saradwata Bandyopadhyay.-->
-</html>

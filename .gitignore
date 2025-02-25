@@ -1,5 +1,3 @@
 #Files to be ignored
-test.php
-test2.php
-filler.php
+test/
 sitemap.xml

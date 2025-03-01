@@ -10,10 +10,10 @@ SET NAMES utf8mb4;
 DROP TABLE IF EXISTS `codes`;
 CREATE TABLE `codes` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `author` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
+  `author` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `tags` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
   `question` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `answer` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `answer` varchar(5000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `codelink` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `softwarelink` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `ts` timestamp NOT NULL,
@@ -48,4 +48,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=ascii;
 
 
--- 2025-02-25 07:49:23
+-- 2025-03-01 14:58:58

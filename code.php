@@ -312,8 +312,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <!-- Download Buttons -->
         <div class="d-flex flex-wrap gap-2 mb-4">
-          <a href="<?php echo $codelink; ?>" class="btn btn-info me-2">Download Code</a>
-          <a href="<?php echo $softwarelink; ?>" class="btn btn-info me-2">Download Model Sim</a>
+          <a href="<?php echo $codelink; ?>" class="btn btn-info me-2" target="_blank">Download Code</a>
+          <a href="<?php echo $softwarelink; ?>" class="btn btn-info me-2" target="_blank">Download Model Sim</a>
         </div>
       <?php endforeach; ?>
       <h4>Add a Comment</h4>

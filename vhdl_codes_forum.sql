@@ -41,11 +41,12 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `userid` int NOT NULL AUTO_INCREMENT,
   `emailid` varchar(50) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(256) NOT NULL,
+  `username` varchar(50) CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL,
+  `password` varchar(256) CHARACTER SET ascii COLLATE ascii_general_ci DEFAULT NULL,
+  `otp` int DEFAULT NULL,
   `ts` timestamp NOT NULL,
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=ascii;
 
 
--- 2025-03-01 14:58:58
+-- 2025-03-16 05:18:46

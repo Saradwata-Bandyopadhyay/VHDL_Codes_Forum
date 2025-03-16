@@ -48,32 +48,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = mysqli_real_escape_string($conn, trim($_POST['signup_email']));
     $password = trim($_POST['signup_password']);
     $confirm_password = trim($_POST['signup_confirm_password']);
+    $otp = trim($_POST['otp']);
     if (
       empty($name) || empty($email) || empty($password) ||
-      empty($confirm_password)
+      empty($confirm_password) || empty($otp)
     ) {
       $errors[] = "All fields are required for signup.";
     } elseif (
       !filter_var($email, FILTER_VALIDATE_EMAIL)
     ) {
       $errors[] = "Invalid email format.";
-    } elseif ($password !== $confirm_password) {
-      $errors[] = "Passwords do not match.";
     } else {
-      $check_email = "SELECT userid FROM users WHERE emailid = '$email'";
-      $check_result = mysqli_query($conn, $check_email);
-      if (mysqli_num_rows($check_result) > 0) {
-        $errors[] = "Email is already registered.";
-      } else {
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $insert_query = "INSERT INTO users (emailid, username, password, ts) VALUES ('$email', '$name', '$hashed_password',
-  current_timestamp())";
+      $checkOtpSql = "SELECT * FROM `users` WHERE `emailid` LIKE '$email' AND `otp` = '$otp'";
+      $otpResult = mysqli_query($conn, $checkOtpSql);
+      $numOtpRows = mysqli_num_rows($otpResult);
 
-        if (mysqli_query($conn, $insert_query)) {
-          $success = "Registration successful! You can now log in.";
+      if ($numOtpRows) {
+        $existSql = "SELECT * FROM `users` WHERE `emailid` LIKE '$email' AND `otp` IS NULL";
+        $result = mysqli_query($conn, $existSql);
+        $numExistRows = mysqli_num_rows($result);
+
+        if ($numExistRows) {
+          $showError = "Username is in use, Please use something else.";
         } else {
-          $errors[] = "Error: " . mysqli_error($conn);
+          if ($password == $confirm_password) {
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+            $updateSql = "UPDATE `users` SET `password` = '$hash', `otp` = NULL,`username`='$name',`ts`=current_timestamp() WHERE `emailid` LIKE '$email'";
+            $updateResult = mysqli_query($conn, $updateSql);
+
+            if ($updateResult) {
+              $success = "Registration successful! You can now log in.";
+              ;
+            } else {
+              $errors[] = "Error updating user data.";
+            }
+          } else {
+            $errors[] = "Passwords do not match.";
+          }
         }
+      } else {
+        $errors[] = "Invalid OTP. Please enter the correct OTP.";
       }
     }
   } elseif (isset($_POST['logout'])) {
@@ -121,6 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <div class="container pt-4 pb-4">
     <!-- Display Errors or Success Messages -->
+    <div id="alert-container"></div>
     <?php if (!empty($errors)): ?>
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <?php foreach ($errors as $error): ?>
@@ -154,9 +169,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" class="form-control bg-secondary text-light" id="email" name="login_email"
-                  placeholder="Enter your email" maxlength="50" required>
+                  placeholder="Enter your email" maxlength="50" autocomplete="on" required>
               </div>
-
               <!-- Password Input -->
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
@@ -196,20 +210,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div class="modal-body">
             <form action="code.php?id=<?php echo $id ?>" method="POST">
               <input type="hidden" name="action" value="signup">
+              <!-- Email Input -->
+              <div class="mb-3">
+                <label for="signupEmail" class="form-label">Email id</label>
+                <input type="email" class="form-control bg-secondary text-light" id="signupEmail" name="signup_email"
+                  placeholder="Enter your email" maxlength="50" autocomplete="on" required>
+              </div>
+              <!-- Generate OTP -->
+              <button type="button" class="btn btn-primary w-100" onclick="sendOTP()">Send
+                OTP</button>
+              <!-- OTP Input -->
+              <div class="mb-3">
+                <label for="otp" class="form-label">Enter OTP</label>
+                <input type="text" class="form-control bg-secondary text-light" id="otp" name="otp"
+                  placeholder="Enter OTP" required>
+              </div>
               <!-- Name Input -->
               <div class="mb-3">
                 <label for="name" class="form-label">User Name</label>
                 <input type="text" class="form-control bg-secondary text-light" id="name" name="signup_name"
                   placeholder="Enter user name" maxlength="50" required>
               </div>
-
-              <!-- Email Input -->
-              <div class="mb-3">
-                <label for="signupEmail" class="form-label">Email id</label>
-                <input type="email" class="form-control bg-secondary text-light" id="signupEmail" name="signup_email"
-                  placeholder="Enter your email" maxlength="50" required>
-              </div>
-
               <!-- Password Input -->
               <div class="mb-3">
                 <label for="signupPassword" class="form-label">Password</label>
@@ -282,7 +303,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p>Here is the solution for the above question =></p>
           <div class="position-relative">
             <pre id="codeBlock" class="bg-dark text-white p-3 rounded border border-light">
-            <code><?php echo htmlspecialchars($answer); ?></code></pre>
+                                      <code><?php echo htmlspecialchars($answer); ?></code></pre>
             <button class="btn btn-sm btn-info position-absolute top-0 end-0" onclick="copyCode()">Copy Code</button>
           </div>
           <p>You can directly download the <code>Source Code</code> and the <code>Model Sim</code> application from the
@@ -303,8 +324,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div class="mb-3">
             <div class="pt-3">
               <label for="comment" class="form-label">Type your Comment here *</label>
-              <textarea class="form-control bg-dark text-white" id="comment" rows="3" name="comment" maxlength="500" minlength="4"
-                required></textarea>
+              <textarea class="form-control bg-dark text-white" id="comment" rows="3" name="comment" maxlength="500"
+                minlength="4" required></textarea>
             </div>
           </div>
           <button type="submit" class="btn btn-info">Submit</button>

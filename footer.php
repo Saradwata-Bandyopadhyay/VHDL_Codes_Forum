@@ -11,6 +11,47 @@
     integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
     crossorigin="anonymous"></script>
 <script>
+    function sendOTP() {
+        var email = document.getElementById('signupEmail').value;
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'send_otp.php', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        document.getElementById('alert-container').innerHTML = `
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                OTP sent successfully!
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>`;
+                    } else {
+                        document.getElementById('alert-container').innerHTML = `
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                Error sending OTP: ${response.error}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>`;
+                    }
+                } catch (error) {
+                    document.getElementById('alert-container').innerHTML = `
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            Error parsing JSON response. Please try again.
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`;
+                }
+            } else {
+                document.getElementById('alert-container').innerHTML = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        Error sending OTP. Please try again.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>`;
+            }
+        };
+        xhr.send('email=' + email);
+    }
+</script>
+<script>
     function copyCode() {
         // Select the code block
         const code = document.querySelector('#codeBlock').innerText;
